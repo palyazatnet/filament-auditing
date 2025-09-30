@@ -46,15 +46,73 @@ class AuditInfolist
                             ->columns(2),
                         Tab::make(trans('filament-auditing::filament-auditing.infolist.tab.old-values'))
                             ->schema([
-                                KeyValueEntry::make('old_values')
+                                KeyValueEntry::make(config('filament-auditing.custom_old_value_attribute', 'old_values'))
                                     ->hiddenLabel()
-                                    ->keyLabel(trans('filament-auditing::filament-auditing.infolist.field')),
+                                    ->keyLabel(trans('filament-auditing::filament-auditing.infolist.field'))
+                                    ->formatStateUsing(function ($state, $record) {
+                                        $auditable = $record->auditable ?? null;
+                                        // Allow either instance or class method. Preferred: instance method on auditable.
+                                        if ($auditable && method_exists($auditable, 'translateAuditField')) {
+                                            $translated = [];
+                                            foreach (($state ?? []) as $key => $value) {
+                                                try {
+                                                    $label = $auditable->translateAuditField($key, 'old');
+                                                } catch (\Throwable $e) {
+                                                    $label = $key;
+                                                }
+                                                $translated[$label] = $value;
+                                            }
+                                            return $translated;
+                                        }
+                                        // Fallback to static method on auditable_type class if available
+                                        if (isset($record->auditable_type) && method_exists($record->auditable_type, 'translateAuditField')) {
+                                            $translated = [];
+                                            foreach (($state ?? []) as $key => $value) {
+                                                try {
+                                                    $label = $record->auditable_type::translateAuditField($key, 'old');
+                                                } catch (\Throwable $e) {
+                                                    $label = $key;
+                                                }
+                                                $translated[$label] = $value;
+                                            }
+                                            return $translated;
+                                        }
+                                        return $state;
+                                    }),
                             ]),
                         Tab::make(trans('filament-auditing::filament-auditing.infolist.tab.new-values'))
                             ->schema([
-                                KeyValueEntry::make('new_values')
+                                KeyValueEntry::make(config('filament-auditing.custom_new_value_attribute', 'new_values'))
                                     ->hiddenLabel()
-                                    ->keyLabel(trans('filament-auditing::filament-auditing.infolist.field')),
+                                    ->keyLabel(trans('filament-auditing::filament-auditing.infolist.field'))
+                                    ->formatStateUsing(function ($state, $record) {
+                                        $auditable = $record->auditable ?? null;
+                                        if ($auditable && method_exists($auditable, 'translateAuditField')) {
+                                            $translated = [];
+                                            foreach (($state ?? []) as $key => $value) {
+                                                try {
+                                                    $label = $auditable->translateAuditField($key, 'new');
+                                                } catch (\Throwable $e) {
+                                                    $label = $key;
+                                                }
+                                                $translated[$label] = $value;
+                                            }
+                                            return $translated;
+                                        }
+                                        if (isset($record->auditable_type) && method_exists($record->auditable_type, 'translateAuditField')) {
+                                            $translated = [];
+                                            foreach (($state ?? []) as $key => $value) {
+                                                try {
+                                                    $label = $record->auditable_type::translateAuditField($key, 'new');
+                                                } catch (\Throwable $e) {
+                                                    $label = $key;
+                                                }
+                                                $translated[$label] = $value;
+                                            }
+                                            return $translated;
+                                        }
+                                        return $state;
+                                    }),
                             ]),
                     ]),
             ]);
