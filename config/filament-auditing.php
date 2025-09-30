@@ -43,4 +43,8 @@ return [
         'AuditResource' => AuditResource::class,
     ],
 
+	'custom_old_value_attribute' => 'old_values',
+
+	'custom_new_value_attribute' => 'new_values'
+
 ];
