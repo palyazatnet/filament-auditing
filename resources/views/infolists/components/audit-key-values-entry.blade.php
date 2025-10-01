@@ -2,17 +2,23 @@
     <thead>
         <tr>
             <th scope="col">
-                Mező                    </th>
+                {{ trans('filament-auditing::filament-auditing.infolist.key_label') }}
+            </th>
 
             <th scope="col">
-                Érték                    </th>
+                {{ trans('filament-auditing::filament-auditing.infolist.value_label') }}
+            </th>
         </tr>
     </thead>
 
     <tbody>
         @foreach($getState() ?? [] as $key => $value)
             <tr>
-                <td>{{ $key }}</td>
+                @if(method_exists($getRecord()->auditable, 'translateAuditField'))
+                    <td>{{ $getRecord()->auditable->translateAuditField($key, 'old') }}</td>
+                @else
+                    <td>{{ $key }}</td>
+                @endif
                 <td>{{ $value }}</td>
             </tr>
         @endforeach
