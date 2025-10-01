@@ -20,7 +20,12 @@ class AuditResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    public static function infolist(Schema $schema): Schema
+	public static function getLabel(): ?string
+	{
+		return trans('filament-auditing::filament-auditing.resource.label');
+	}
+
+	public static function infolist(Schema $schema): Schema
     {
         return AuditInfolist::configure($schema);
     }

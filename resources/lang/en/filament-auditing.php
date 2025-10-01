@@ -60,6 +60,7 @@ return [
     'infolist.user-agent' => 'User Agent',
     'infolist.tags' => 'Tags',
     'infolist.field' => 'Field',
+	'infolist.date-format' => 'M j, Y H:i:s',
 
     /*
     |--------------------------------------------------------------------------
