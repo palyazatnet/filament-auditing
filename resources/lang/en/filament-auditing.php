@@ -71,4 +71,5 @@ return [
     'notification.restored' => 'Audit restored',
     'notification.unchanged' => 'Nothing to change',
 
+	'resource.label' => 'Audits',
 ];

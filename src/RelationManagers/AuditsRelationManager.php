@@ -30,6 +30,14 @@ class AuditsRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'id';
 
+	/**
+	 * @return string|null
+	 */
+	public static function getModelLabel(): ?string
+	{
+		return trans('filament-auditing::filament-auditing.resource.label');
+	}
+
     protected $listeners = ['updateAuditsRelationManager' => '$refresh'];
 
     public static function isLazy(): bool
