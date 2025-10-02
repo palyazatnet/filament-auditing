@@ -19,8 +19,8 @@
                 @else
                     <td>{{ $key }}</td>
                 @endif
-                @if(method_exists($getRecord()->auditable, 'formatFieldForPresentation'))
-                    <td>{{ $getRecord()->auditable->formatFieldForPresentation($key, $value) }}</td>
+                @if(method_exists($getRecord()->auditable, 'formatValueForAudit'))
+                    <td>{{ $getRecord()->auditable->formatValueForAudit($value) }}</td>
                 @else
                     <td>{{ $value }}</td>
                 @endif
