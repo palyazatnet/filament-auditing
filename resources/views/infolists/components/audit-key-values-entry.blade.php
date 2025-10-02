@@ -19,7 +19,11 @@
                 @else
                     <td>{{ $key }}</td>
                 @endif
-                <td>{{ $value }}</td>
+                @if(method_exists($getRecord()->auditable, 'formatFieldForPresentation'))
+                    <td>{{ $getRecord()->auditable->formatFieldForPresentation($key, $value) }}</td>
+                @else
+                    <td>{{ $value }}</td>
+                @endif
             </tr>
         @endforeach
     </tbody>
