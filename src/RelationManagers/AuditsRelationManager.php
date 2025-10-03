@@ -30,13 +30,6 @@ class AuditsRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'id';
 
-	/**
-	 * @return string|null
-	 */
-	public static function getModelLabel(): ?string
-	{
-		return trans('filament-auditing::filament-auditing.resource.label');
-	}
 
     protected $listeners = ['updateAuditsRelationManager' => '$refresh'];
 
@@ -72,7 +65,7 @@ class AuditsRelationManager extends RelationManager
         }
 
         return $table
-            ->recordTitle(fn (Model $record): string => 'Audit')
+			->recordTitle(fn (Model $record): string => trans('filament-auditing::filament-auditing.resource.label'))
             ->modifyQueryUsing(fn (Builder $query) => $query->with(['user', 'auditable'])->orderBy(config('filament-auditing.audits_sort.column'), config('filament-auditing.audits_sort.direction')))
             ->content(fn (): ?View => config('filament-auditing.custom_audits_view') ? view('filament-auditing::tables.custom-audit-content', Arr::add(self::customViewParameters(), 'owner', $this->getOwnerRecord())) : null)
             ->emptyStateHeading(trans('filament-auditing::filament-auditing.table.empty_state_heading'))
