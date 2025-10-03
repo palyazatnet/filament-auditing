@@ -20,7 +20,7 @@
                     <td>{{ $key }}</td>
                 @endif
                 @if(method_exists($getRecord()->auditable, 'formatValueForAudit'))
-                    <td>{{ new \Illuminate\Support\HtmlString($getRecord()->auditable->formatValueForAudit($value)) }}</td>
+                    <td>{{ new \Illuminate\Support\HtmlString($getRecord()->auditable->formatValueForAudit($value, $key)) }}</td>
                 @else
                     <td>{{ $value }}</td>
                 @endif
